@@ -14,23 +14,35 @@ describe('GitUserSearchController', function() {
 
   describe('when searching for a user', function(){
 
-      var items = [
-        {
-          "login": "tansaku",
-          "avatar_url": "https://avatars.githubusercontent.com/u/30216?v=3",
-          "html_url": "https://github.com/tansaku"
-        },
-        {
-          "login": "stephenlloyd",
-          "avatar_url": "https://avatars.githubusercontent.com/u/196474?v=3",
-          "html_url": "https://github.com/stephenlloyd"
-        }
-      ];
+    var httpBackend;
 
-      it('display search results', function(){
-        ctrl.searchTerm = 'hello';
-        ctrl.doSearch();
-        expect(ctrl.searchResult.items).toEqual(items);
-      });
+    beforeEach(inject(function($httpBackend) {
+      httpBackend = $httpBackend
+      httpBackend
+        .when("GET", "https://api.github.com/search/user?access_token=bcdea0c6187824554f2a9a9fbef92d1c5d298288&q=hello")
+        .respond(
+          { items: items }
+        );
+    }));
+
+    var items = [
+      {
+        "login": "tansaku",
+        "avatar_url": "https://avatars.githubusercontent.com/u/30216?v=3",
+        "html_url": "https://github.com/tansaku"
+      },
+      {
+        "login": "stephenlloyd",
+        "avatar_url": "https://avatars.githubusercontent.com/u/196474?v=3",
+        "html_url": "https://github.com/stephenlloyd"
+      }
+    ];
+
+    it('display search results', function(){
+      ctrl.searchTerm = 'hello';
+      ctrl.doSearch();
+      httpBackend.flush();
+      expect(ctrl.searchResult.items).toEqual(items);
+    });
   });
 });
