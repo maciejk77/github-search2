@@ -19,9 +19,13 @@
         ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0 } }">
         <button class="btn" ng-click="searchCtrl.doSearch()">Search</button>
       </form>
+      <div class="search-status" ng-show="searchCtrl.searchTerm != null"
+      ng-hide="searchCtrl.searchResult == null">
+        Showing results for: {{searchCtrl.searchTerm}}
+      </div>
       <ul class="list-group" ng-repeat="user in searchCtrl.searchResult.items">
         <li>
-          <img ng-src="{{user.avatar_url}}&s=50">
+          <img height='50' ng-src="{{user.avatar_url}}&s=50">
           <a ng-href="{{user.html_url}}">{{user.login}}</a>
         </li>
       </ul>
