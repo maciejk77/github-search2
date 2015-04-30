@@ -19,11 +19,16 @@ describe('GitUserSearchController', function() {
     beforeEach(inject(function($httpBackend) {
       httpBackend = $httpBackend
       httpBackend
-        .when("GET", "https://api.github.com/search/user?access_token=bcdea0c6187824554f2a9a9fbef92d1c5d298288&q=hello")
+        .expectGET("https://api.github.com/search/users?access_token=bcdea0c6187824554f2a9a9fbef92d1c5d298288&q=hello")
         .respond(
           { items: items }
         );
     }));
+
+    afterEach(function() {
+      httpBackend.verifyNoOutstandingExpectation();
+      httpBackend.verifyNoOutstandingRequest();
+    });
 
     var items = [
       {
@@ -44,5 +49,7 @@ describe('GitUserSearchController', function() {
       httpBackend.flush();
       expect(ctrl.searchResult.items).toEqual(items);
     });
+
   });
 });
+
